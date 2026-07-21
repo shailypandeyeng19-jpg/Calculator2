@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator Pro</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700;900&display=swap');
+
+  body {
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  /* BACKGROUND */
+  .bg {
+    position: fixed;
+    width: 100%; height: 100%;
+    background: radial-gradient(circle at 30% 50%, #ff00ff44, transparent 50%),
+                radial-gradient(circle at 70% 50%, #00ffff44, transparent 50%);
+    animation: move 15s infinite alternate;
+  }
+  @keyframes move {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* COMMON */
+  .page { display: none; min-height: 100vh; justify-content: center; align-items: center; }
+  .page.active { display: flex; }
+  
+  .glass {
+    background: rgba(10,10,20,0.5);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    box-shadow: 0 0 50px #ff00ff;
+  }
+
+  /* LOGIN */
+  .login-box {
+    width: 90%;
+    max-width: 400px;
+    padding: 50px 40px;
+    text-align: center;
+  }
+
+  .login-box h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+  }
+
+  .login-box input {
+    width: 100%;
+    height: 55px;
+    background: #000;
+    border: 2px solid #ff00ff;
+    border-radius: 15px;
+    padding: 0 20px;
+    color: #00ffff;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    outline: none;
+  }
+  .login-box input:focus { border-color: #00ffff; box-shadow: 0 0 20px #00ffff; }
+
+  .main-btn {
+    width: 100%;
+    padding: 18px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #ff00ff, #00ffff);
+    color: #000;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .main-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px #00ffff; }
+
+  .error { color: #ff0044; margin-top: 15px; display: none; }
+
+  /* MAIN PAGE */
+  .main-container { text-align: center; padding: 40px; }
+  
+  .main-container h1 {
+    font-size: 4rem;
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+  }
+
+  .main-card {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 60px 40px;
+  }
+
+  .main-card .icon { font-size: 8rem; filter: drop-shadow(0 0 40px #ff00ff); margin-bottom: 20px; }
+
+  .logout {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 25px;
+    background: #000;
+    border: 2px solid #ff00ff;
+    color: #ff00ff;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .logout:hover { background: #ff00ff; color: #000; }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="page active">
+  <div class="login-box glass">
+    <h1>LOGIN</h1>
+    <input type="text" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button class="main-btn" onclick="login()">LOGIN</button>
+    <p class="error" id="errorMsg">Wrong Email or Password</p>
+    <p style="margin-top:20px; color:#aaa; font-size:0.9rem;">Demo: admin@neon.com / 123456</p>
+  </div>
+</div>
+
+<!-- MAIN PAGE -->
+<div id="mainPage" class="page">
+  <button class="logout" onclick="logout()">Logout</button>
+  
+  <div class="main-container">
+    <h1>CALCULATOR PRO</h1>
+    
+    <div class="main-card glass">
+      <div class="icon">🧮</div>
+      <h2 style="margin-bottom:10px;">Download Now</h2>
+      <p style="color:#00ffff; margin-bottom:30px;">v3.0 • 3.2 KB</p>
+      <a href="Calculator2.exe" download class="main-btn">DOWNLOAD</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function login(){
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    if(email === 'xyzabc@gmail.com' && password === '12hn90'){
+      localStorage.setItem('login', 'true');
+      showPage('mainPage');
+    } else {
+      document.getElementById('errorMsg').style.display = 'block';
+    }
+  }
+
+  function logout(){
+    localStorage.removeItem('login');
+    showPage('loginPage');
+  }
+
+  function showPage(id){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  // Auto login check
+  if(localStorage.getItem('login') === 'true') showPage('mainPage');
+
+  // Enter key
+  document.addEventListener('keypress', e => { if(e.key === 'Enter') login(); });
+</script>
+
+</body>
+</html>
